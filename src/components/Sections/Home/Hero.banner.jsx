@@ -63,7 +63,7 @@ export default function HeroBanner() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-2 sm:px-4 py-6 md:py-10 w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto text-center gap-4 md:gap-6 lg:gap-8 bg-black/80 rounded-xl shadow-xl">
+      <div className="relative z-10 flex flex-col items-center justify-center px-2 sm:px-4 py-6 md:py-10 w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto text-center gap-16 md:gap-4 lg:gap-6 bg-black/80 rounded-xl shadow-xl">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
