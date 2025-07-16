@@ -23,7 +23,7 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full py-10 md:py-16 lg:py-20 flex flex-col items-center justify-center overflow-visible font-sans bg-black min-h-[90vh]"
+      className="relative w-full py-6 md:py-10 lg:py-12 flex flex-col items-center justify-start overflow-visible font-sans bg-black min-h-[80vh]"
       style={{ fontFamily: "Inter, Segoe UI, Arial, sans-serif" }}
     >
       {/* Animated, glassmorphic glowing pill badge */}
@@ -104,7 +104,7 @@ export default function HeroBanner() {
       </div>
 
       {/* Animated Core Members Image Section with Parallax */}
-      <div className="mt-8 md:mt-12 flex flex-col items-center justify-center w-full">
+      <div className="mt-4 md:mt-6 flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-4">
         <motion.div
           ref={imgRef}
           style={{ y }}
@@ -121,7 +121,7 @@ export default function HeroBanner() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: "circOut" }}
-            className="w-full h-full rounded-3xl object-cover shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-auto max-h-[50vh] rounded-2xl object-cover shadow-lg hover:scale-102 transition-transform duration-300 border border-white/10"
           />
           <p
             ref={textRef}
