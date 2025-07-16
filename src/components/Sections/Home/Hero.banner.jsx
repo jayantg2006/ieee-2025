@@ -76,31 +76,10 @@ export default function HeroBanner() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.3, ease: "circOut" }}
-          className="text-sm sm:text-base md:text-xl font-medium mb-4 md:mb-8 text-blue-100 leading-relaxed whitespace-normal"
+          className="text-sm sm:text-base md:text-xl font-medium mb-4 text-blue-100 leading-relaxed whitespace-normal"
         >
           At IEEE NSUT, we unite to learn, teach, and innovate together.
         </motion.p>
-        <motion.a
-          href="#join"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: 0.5,
-            delay: 0.1,
-            type: "spring",
-            stiffness: 300,
-            damping: 24,
-          }}
-          whileHover={{
-            scale: 1.08,
-            boxShadow: "0 0 32px #42a5f5, 0 0 0 4px #1565c0",
-          }}
-          className="group relative inline-block px-8 md:px-10 py-3 md:py-4 rounded-full bg-gradient-to-r from-[#1565c0] to-[#42a5f5] text-white text-base md:text-lg font-bold shadow-xl transition-all duration-300 ease-out focus:outline-none focus:ring-4 focus:ring-[#1565c0]/40 overflow-hidden mt-2"
-          aria-label="Join IEEE NSUT"
-        >
-          <span className="relative z-10">Join Now</span>
-          <span className="absolute inset-0 bg-gradient-to-r from-[#1565c0]/30 to-[#42a5f5]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
-        </motion.a>
       </div>
 
       {/* Animated Core Members Image Section with Parallax */}
