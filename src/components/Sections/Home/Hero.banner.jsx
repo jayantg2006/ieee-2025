@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { TypeAnimation } from "react-type-animation";
 
 export default function HeroBanner() {
   const textRef = useRef(null);
@@ -64,14 +65,35 @@ export default function HeroBanner() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center px-2 sm:px-4 py-6 md:py-10 w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto text-center gap-2 md:gap-4 lg:gap-6 bg-black/80 rounded-xl shadow-xl">
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "circOut" }}
-          className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight mb-2 md:mb-4 text-white drop-shadow-lg leading-tight whitespace-normal"
+          className="w-full"
         >
-          Welcome to IEEE NSUT
-        </motion.h1>
+          <TypeAnimation
+            sequence={[
+              "Welcome to IEEE NSUT",
+              1000, // Waits 1s
+              "Welcome to IEEE NSUT", // Maintains the text after typing
+            ]}
+            wrapper="h1"
+            cursor={true}
+            repeat={1}
+            style={{
+              display: "block",
+              fontSize: "clamp(1.5rem, 5vw, 3rem)",
+              fontWeight: "800",
+              lineHeight: "1.1",
+              textAlign: "center",
+              color: "white",
+              textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+              marginBottom: "0.5rem",
+              fontFamily: "Inter, sans-serif",
+            }}
+            className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight mb-2 md:mb-4 drop-shadow-lg"
+          />
+        </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
