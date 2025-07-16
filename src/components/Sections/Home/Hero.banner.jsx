@@ -1,10 +1,35 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { TypeAnimation } from "react-type-animation";
 
 export default function HeroBanner() {
   const textRef = useRef(null);
   const imgRef = useRef(null);
+  const [showCursor, setShowCursor] = useState(true);
+  const [displayText, setDisplayText] = useState("");
+  const fullText = "Welcome to IEEE NSUT";
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const typingSpeed = 100; // ms per character
+
+    const typeWriter = () => {
+      if (currentIndex < fullText.length) {
+        setDisplayText((prev) => prev + fullText.charAt(currentIndex));
+        currentIndex++;
+        setTimeout(typeWriter, typingSpeed);
+      } else {
+        // Start cursor blink after typing is done
+        const interval = setInterval(() => {
+          setShowCursor((prev) => !prev);
+        }, 500);
+
+        return () => clearInterval(interval);
+      }
+    };
+
+    const timer = setTimeout(typeWriter, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Parallax effect for core team image
   const { scrollY } = useScroll();
@@ -71,30 +96,33 @@ export default function HeroBanner() {
           transition={{ duration: 1, ease: "circOut" }}
           className="w-full"
         >
-          <TypeAnimation
-            sequence={[
-              "Welcome to IEEE NSUT",
-              () => {
-                // This function will be called when the animation is complete
-                console.log("Done typing!");
-              },
-            ]}
-            wrapper="h1"
-            cursor={true}
-            repeat={0}
+          <h1
+            className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight mb-2 md:mb-4 text-white drop-shadow-lg"
             style={{
-              display: "block",
               fontSize: "clamp(1.5rem, 5vw, 3rem)",
-              fontWeight: "800",
               lineHeight: "1.1",
               textAlign: "center",
-              color: "white",
-              textShadow: "0 2px 4px rgba(0,0,0,0.2)",
               marginBottom: "0.5rem",
               fontFamily: "Inter, sans-serif",
+              display: "inline-block",
+              position: "relative",
             }}
-            className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight mb-2 md:mb-4 drop-shadow-lg"
-          />
+          >
+            {displayText}
+            <motion.span
+              animate={{ opacity: showCursor ? 1 : 0 }}
+              transition={{ duration: 0.5, repeat: Infinity }}
+              style={{
+                position: "absolute",
+                right: "-10px",
+                width: "3px",
+                height: "1em",
+                backgroundColor: "white",
+                display: "inline-block",
+                verticalAlign: "bottom",
+              }}
+            />
+          </h1>
         </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 30 }}
