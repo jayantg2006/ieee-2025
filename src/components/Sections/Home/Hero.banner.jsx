@@ -1,70 +1,136 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export default function HeroBanner() {
-  const headlineRef = useRef(null);
-  const subtitleRef = useRef(null);
-  const buttonRef = useRef(null);
+  const textRef = useRef(null);
+  const imgRef = useRef(null);
 
-  useEffect(() => {
-    // Animate headline
-    if (headlineRef.current) {
-      headlineRef.current.classList.add("animate-fade-in-down");
+  // Parallax effect for core team image
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 300], [0, 60]);
+
+  // Handler to move the text down on image hover
+  const handleImageHover = () => {
+    if (textRef.current) {
+      textRef.current.classList.add("translate-y-4");
     }
-    // Animate subtitle
-    if (subtitleRef.current) {
-      setTimeout(() => {
-        subtitleRef.current.classList.add("animate-fade-in");
-      }, 400);
+  };
+  const handleImageUnhover = () => {
+    if (textRef.current) {
+      textRef.current.classList.remove("translate-y-4");
     }
-    // Animate button
-    if (buttonRef.current) {
-      setTimeout(() => {
-        buttonRef.current.classList.add("animate-fade-in-up");
-      }, 800);
-    }
-  }, []);
+  };
 
   return (
-    <section className="relative w-full min-h-[calc(100vh-6rem)] flex items-center justify-center overflow-hidden bg-[#0a2540]">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 w-full h-full">
-        <img
-          src="/logo.png"
-          alt="IEEE NSUT Background"
-          className="w-full h-full object-cover object-center scale-125 opacity-30 select-none pointer-events-none"
+    <section
+      className="relative w-full py-10 md:py-16 lg:py-20 flex flex-col items-center justify-center overflow-visible font-sans bg-black min-h-[90vh]"
+      style={{ fontFamily: "Inter, Segoe UI, Arial, sans-serif" }}
+    >
+      {/* Animated, glassmorphic glowing pill badge */}
+      <motion.span
+        initial={{ opacity: 0, y: -30, filter: "blur(8px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 1, ease: "circOut" }}
+        className="inline-block px-6 py-2 rounded-full text-sm md:text-base font-semibold mb-8 shadow-xl bg-white/10 border border-white/30 backdrop-blur-lg text-white relative z-20"
+        style={{ boxShadow: "0 0 32px 8px #42a5f5, 0 0 0 2px #fff2" }}
+      >
+        <span className="relative z-10">
+          Institute of Electrical and Electronics Engineers
+        </span>
+        <span className="absolute inset-0 rounded-full bg-gradient-to-r from-[#1565c0]/40 to-[#42a5f5]/40 blur-lg opacity-60 animate-pulse z-0" />
+      </motion.span>
+
+      {/* Animated, immersive background */}
+      <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden">
+        {/* Animated gradient */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2 }}
+          className="absolute inset-0 bg-gradient-to-br from-[#0a2540] via-[#1565c0] to-black animate-gradient-x"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a2540]/90 to-[#0a2540]/95" />
+        {/* Floating techy shapes */}
+        <motion.div
+          className="absolute left-1/4 top-1/3 w-40 h-40 bg-[#42a5f5]/20 rounded-full blur-2xl animate-float-slow"
+          animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute right-1/4 bottom-1/4 w-32 h-32 bg-[#1565c0]/30 rounded-full blur-2xl animate-float-slow"
+          animate={{ y: [0, -20, 0], x: [0, -15, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-4 py-24 w-full max-w-3xl mx-auto text-center">
-        <h1
-          ref={headlineRef}
-          className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg opacity-0 animate-duration-1000"
+      <div className="relative z-10 flex flex-col items-center justify-center px-2 sm:px-4 py-6 md:py-10 w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto text-center gap-4 md:gap-6 lg:gap-8 bg-black/80 rounded-xl shadow-xl">
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "circOut" }}
+          className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight mb-2 md:mb-4 text-white drop-shadow-lg leading-tight whitespace-normal"
         >
           Welcome to IEEE NSUT
-        </h1>
-        <p
-          ref={subtitleRef}
-          className="text-lg md:text-2xl font-medium mb-8 text-blue-100 opacity-0 animate-duration-1000"
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.3, ease: "circOut" }}
+          className="text-sm sm:text-base md:text-xl font-medium mb-4 md:mb-8 text-blue-100 leading-relaxed whitespace-normal"
         >
           At IEEE NSUT, we unite to learn, teach, and innovate together.
-        </p>
-        <button
-          ref={buttonRef}
-          className="group relative inline-block px-8 py-4 rounded-full bg-[#1565c0] text-white text-lg font-semibold shadow-lg transition-all duration-300 ease-out hover:bg-white hover:text-[#1565c0] hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#1565c0]/40 opacity-0 animate-duration-1000 overflow-hidden"
+        </motion.p>
+        <motion.a
+          href="#join"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.5,
+            delay: 0.1,
+            type: "spring",
+            stiffness: 300,
+            damping: 24,
+          }}
+          whileHover={{
+            scale: 1.08,
+            boxShadow: "0 0 32px #42a5f5, 0 0 0 4px #1565c0",
+          }}
+          className="group relative inline-block px-8 md:px-10 py-3 md:py-4 rounded-full bg-gradient-to-r from-[#1565c0] to-[#42a5f5] text-white text-base md:text-lg font-bold shadow-xl transition-all duration-300 ease-out focus:outline-none focus:ring-4 focus:ring-[#1565c0]/40 overflow-hidden mt-2"
+          aria-label="Join IEEE NSUT"
         >
           <span className="relative z-10">Join Now</span>
-          <span className="absolute inset-0 bg-gradient-to-r from-[#1565c0]/30 to-[#42a5f5]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </button>
+          <span className="absolute inset-0 bg-gradient-to-r from-[#1565c0]/30 to-[#42a5f5]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+        </motion.a>
       </div>
 
-      {/* Futuristic Techy Glow */}
-      <div
-        className="pointer-events-none absolute -inset-16 blur-3xl opacity-40 z-0"
-        aria-hidden="true"
-      >
-        <div className="w-full h-full bg-gradient-to-tr from-[#1565c0]/40 via-[#42a5f5]/30 to-transparent rounded-full" />
+      {/* Animated Core Members Image Section with Parallax */}
+      <div className="mt-8 md:mt-12 flex flex-col items-center justify-center w-full">
+        <motion.div
+          ref={imgRef}
+          style={{ y }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "circOut" }}
+          className="flex flex-wrap gap-4 md:gap-6 justify-center items-center px-2 w-full relative z-10"
+          onMouseEnter={handleImageHover}
+          onMouseLeave={handleImageUnhover}
+        >
+          <motion.img
+            src="https://ieeensut.netlify.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fteam.27a51d4b.jpg&w=1920&q=75"
+            alt="Core Members"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: "circOut" }}
+            className="w-full h-full rounded-3xl object-cover shadow-lg hover:scale-105 transition-transform duration-300"
+          />
+          <p
+            ref={textRef}
+            className="absolute left-1/2 -translate-x-1/2 bottom-4 md:bottom-6 bg-black/70 px-4 py-2 rounded-full text-blue-100 text-xs sm:text-sm transition-transform duration-300 z-20 pointer-events-none"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            Meet our core team members
+          </p>
+        </motion.div>
       </div>
     </section>
   );
