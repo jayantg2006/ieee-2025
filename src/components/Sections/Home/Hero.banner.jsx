@@ -74,12 +74,14 @@ export default function HeroBanner() {
           <TypeAnimation
             sequence={[
               "Welcome to IEEE NSUT",
-              1000, // Waits 1s
-              "Welcome to IEEE NSUT", // Maintains the text after typing
+              () => {
+                // This function will be called when the animation is complete
+                console.log("Done typing!");
+              },
             ]}
             wrapper="h1"
             cursor={true}
-            repeat={1}
+            repeat={0}
             style={{
               display: "block",
               fontSize: "clamp(1.5rem, 5vw, 3rem)",
