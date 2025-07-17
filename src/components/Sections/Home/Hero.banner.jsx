@@ -20,6 +20,12 @@ export default function HeroBanner() {
   const controls = useAnimation();
   const isInView = useInView(imageRef, { once: true, amount: 0.3 });
 
+  // Track scroll position relative to container
+  const { scrollYProgress: containerScrollY } = useScroll({
+    target: imageContainerRef,
+    offset: ["start end", "end start"],
+  });
+
   // Scroll progress for exit animation
   const { scrollYProgress } = useScroll({
     target: imageRef,
@@ -39,38 +45,55 @@ export default function HeroBanner() {
   );
   const y = useTransform(scrollYProgress, [0, 1], [0, 30]);
 
-  // Enhanced entrance animation
-  const imageVariants = {
-    hidden: {
-      opacity: 0,
-      y: 40,
-      scale: 0.95,
-      filter: "blur(2px)",
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1], // Custom easing for smooth motion
-        when: "beforeChildren",
-        staggerChildren: 0.2,
-      },
-    },
+  // Enhanced entrance animation with scroll-based controls
+  useEffect(() => {
+    if (isInView) {
+      // Start the main container animation
+      controls.start({
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        transition: {
+          duration: 0.8,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      });
+
+      // Start the caption animation with a slight delay
+      setTimeout(() => {
+        controls.start({
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 0.6,
+            ease: [0.16, 1, 0.3, 1],
+          },
+        });
+      }, 300);
+    }
+  }, [isInView, controls]);
+
+  // Scroll-based transform for the container
+  const containerY = useTransform(containerScrollY, [0, 1], ["0%", "10%"]);
+
+  const containerOpacity = useTransform(
+    containerScrollY,
+    [0, 0.5, 1],
+    [1, 1, 0.8]
+  );
+
+  // Initial animation state
+  const containerInitial = {
+    opacity: 0,
+    y: 40,
+    scale: 0.95,
+    filter: "blur(2px)",
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
+  const captionInitial = {
+    opacity: 0,
+    y: 20,
   };
 
   useEffect(() => {
@@ -186,34 +209,46 @@ export default function HeroBanner() {
           }}
         >
           <motion.div
-            ref={imgRef}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={imageVariants}
-            className="w-full relative overflow-hidden rounded-2xl shadow-2xl will-change-transform"
-            onMouseEnter={handleImageHover}
-            onMouseLeave={handleImageUnhover}
+            ref={imageContainerRef}
+            className="relative w-full"
             style={{
-              transformStyle: "preserve-3d",
-              transform: "translateZ(0)",
+              y: containerY,
+              opacity: containerOpacity,
+              willChange: "transform, opacity",
             }}
           >
-            <motion.img
-              src="https://ieeensut.netlify.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fteam.27a51d4b.jpg&w=1920&q=75"
-              alt="Core Members"
-              className="w-full h-auto max-h-[50vh] object-cover hover:scale-105 transition-transform duration-500 ease-out"
-              style={{ transformOrigin: "center bottom" }}
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-            />
-            <motion.p
-              ref={textRef}
-              className="absolute left-1/2 -translate-x-1/2 bottom-4 md:bottom-6 bg-black/70 px-4 py-2 rounded-full text-blue-100 text-xs sm:text-sm transition-all duration-300 z-20 pointer-events-none backdrop-blur-sm"
-              style={{ whiteSpace: "nowrap" }}
-              variants={itemVariants}
+            <motion.div
+              ref={imgRef}
+              initial={containerInitial}
+              animate={controls}
+              className="w-full relative overflow-hidden rounded-2xl shadow-2xl will-change-transform"
+              onMouseEnter={handleImageHover}
+              onMouseLeave={handleImageUnhover}
+              style={{
+                transformStyle: "preserve-3d",
+                transform: "translateZ(0)",
+              }}
             >
-              Meet our core team members
-            </motion.p>
+              <motion.img
+                src="https://ieeensut.netlify.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fteam.27a51d4b.jpg&w=1920&q=75"
+                alt="Core Members"
+                className="w-full h-auto max-h-[50vh] object-cover hover:scale-105 transition-transform duration-500 ease-out"
+                style={{ transformOrigin: "center bottom" }}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              />
+              <motion.p
+                ref={textRef}
+                className="absolute left-1/2 -translate-x-1/2 bottom-4 md:bottom-6 bg-black/70 px-4 py-2 rounded-full text-blue-100 text-xs sm:text-sm transition-all duration-300 z-20 pointer-events-none backdrop-blur-sm"
+                style={{
+                  whiteSpace: "nowrap",
+                  ...captionInitial,
+                }}
+                animate={controls}
+              >
+                Meet our core team members
+              </motion.p>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
