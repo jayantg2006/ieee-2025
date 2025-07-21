@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { Typewriter } from "react-simple-typewriter";
 import {
   motion,
   useScroll,
@@ -10,20 +11,19 @@ import {
 export default function HeroBanner() {
   const textRef = useRef(null);
   const imgRef = useRef(null);
-  const [displayText, setDisplayText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const text = "Welcome to IEEE NSUT";
-
-  // Refs and controls for scroll animation
-  const imageRef = useRef(null);
-  const imageContainerRef = useRef(null);
+  const [typingComplete, setTypingComplete] = useState(false);
+  const text = ["Welcome to IEEE NSUT"];
   const controls = useAnimation();
-  const isInView = useInView(imageRef, { once: true, amount: 0.3 });
 
-  // Track scroll position relative to container
-  const { scrollYProgress: containerScrollY } = useScroll({
-    target: imageContainerRef,
-    offset: ["start end", "end start"],
+  // Refs for animations
+  const imageContainerRef = useRef(null);
+  const imageRef = useRef(null);
+
+  // Check if image is in view
+  const isInView = useInView(imageContainerRef, {
+    once: true,
+    amount: 0.2,
+    margin: "0px 0px -100px 0px",
   });
 
   // Scroll progress for exit animation
@@ -32,84 +32,95 @@ export default function HeroBanner() {
     offset: ["start end", "end start"],
   });
 
-  // Adjust these values to control when the fade out starts
-  const fadeStart = 0.2;
-  const fadeEnd = 0.8;
-
-  // Exit animation values
+  // Exit animation values - adjusted to start later
+  const fadeStart = 0.5; // Changed from 0.2 to 0.5 (starts fading at 50% scrolled past)
+  const fadeEnd = 0.9; // Changed from 0.8 to 0.9 (fully faded at 90% scrolled past)
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
   const opacity = useTransform(
     scrollYProgress,
     [0, fadeStart, fadeEnd],
     [1, 1, 0]
   );
-  const y = useTransform(scrollYProgress, [0, 1], [0, 30]);
-
-  // Enhanced entrance animation with scroll-based controls
-  useEffect(() => {
-    if (isInView) {
-      // Start the main container animation
-      controls.start({
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        transition: {
-          duration: 0.8,
-          ease: [0.16, 1, 0.3, 1],
-        },
-      });
-
-      // Start the caption animation with a slight delay
-      setTimeout(() => {
-        controls.start({
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.6,
-            ease: [0.16, 1, 0.3, 1],
-          },
-        });
-      }, 300);
-    }
-  }, [isInView, controls]);
-
-  // Scroll-based transform for the container
-  const containerY = useTransform(containerScrollY, [0, 1], ["0%", "10%"]);
-
-  const containerOpacity = useTransform(
-    containerScrollY,
-    [0, 0.5, 1],
-    [1, 1, 0.8]
+  // Adjust y movement to start later and be more subtle
+  const y = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1], // Starts moving up only after 50% scrolled
+    [0, 0, 20] // Reduced max movement from 30px to 20px for subtlety
   );
 
-  // Initial animation state
-  const containerInitial = {
-    opacity: 0,
-    y: 40,
-    scale: 0.95,
-    filter: "blur(2px)",
+  // Animation variants for entrance
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      scale: 0.98,
+      rotateX: 5,
+      rotateY: 2,
+      filter: "brightness(0.8) contrast(1.2) blur(4px)",
+      transformPerspective: 1000,
+      transformOrigin: "center bottom",
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotateX: 0,
+      rotateY: 0,
+      filter: "brightness(1) contrast(1) blur(0px)",
+      transition: {
+        duration: 1.2,
+        ease: [0.165, 0.84, 0.44, 1],
+        when: "beforeChildren",
+        staggerChildren: 0.3,
+        delayChildren: 0.1,
+        transform: {
+          duration: 1.5,
+          ease: [0.165, 0.84, 0.44, 1],
+        },
+      },
+    },
   };
 
-  const captionInitial = {
-    opacity: 0,
-    y: 20,
+  const captionVariants = {
+    hidden: {
+      opacity: 0,
+      y: 15,
+      scale: 0.95,
+      filter: "blur(2px)",
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.8,
+        ease: [0.19, 1, 0.22, 1],
+        delay: 0.2,
+      },
+    },
   };
 
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText((prev) => prev + text[currentIndex]);
-        setCurrentIndex((prev) => prev + 1);
-      }, 100); // Adjust typing speed here (lower = faster)
+  const handleType = () => {
+    // Called when typing starts
+  };
 
-      return () => clearTimeout(timeout);
-    }
-  }, [currentIndex, text]);
+  const handleDone = () => {
+    setTypingComplete(true);
+    controls.start({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        delay: 0.2,
+        ease: [0.19, 1, 0.22, 1],
+      },
+    });
+  };
 
-  // Parallax effect for core team image
-  const { scrollY } = useScroll();
-  const parallaxY = useTransform(scrollY, [0, 300], [0, 60]);
+  const handleDelete = () => {
+    // Called when text is being deleted
+  };
 
   // Handler to move the text down on image hover
   const handleImageHover = () => {
@@ -125,8 +136,8 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full py-6 md:py-10 lg:py-12 flex flex-col items-center justify-start overflow-visible font-sans bg-black min-h-[80vh]"
-      style={{ fontFamily: "Inter, Segoe UI, Arial, sans-serif" }}
+      className="relative w-full py-6 md:py-10 lg:py-12 flex flex-col items-center justify-start overflow-visible font-sans bg-black min-h-[80vh] mt-[80px]"
+      style={{ fontFamily: "'Poppins', sans-serif" }}
     >
       {/* Animated, glassmorphic glowing pill badge */}
       <motion.span
@@ -149,7 +160,7 @@ export default function HeroBanner() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2 }}
-          className="absolute inset-0 bg-gradient-to-br from-[#0a2540] via-[#1565c0] to-black animate-gradient-x"
+          className="absolute inset-0 animate-gradient-x"
         />
         {/* Floating techy shapes */}
         <motion.div
@@ -166,10 +177,10 @@ export default function HeroBanner() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center px-2 sm:px-4 py-4 md:py-6 w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto text-center gap-1 md:gap-2 lg:gap-3 bg-black/80 rounded-xl shadow-xl">
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "circOut" }}
+          transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.2 }}
           className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight mb-2 md:mb-4 text-white drop-shadow-lg leading-tight whitespace-normal text-center"
           style={{
             minHeight: "1.5em",
@@ -181,12 +192,26 @@ export default function HeroBanner() {
             fontSize: "clamp(1.5rem, 5vw, 3rem)",
           }}
         >
-          {displayText}
-        </motion.h1>
+          <Typewriter
+            words={text}
+            loop={1}
+            cursor={false}
+            typeSpeed={50}
+            deleteSpeed={50}
+            delaySpeed={1000}
+            onType={handleType}
+            onDelete={handleDelete}
+            onLoopDone={handleDone}
+          />
+        </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.3, ease: "circOut" }}
+          transition={{
+            duration: 1,
+            delay: 1, // Slight delay for smoothness, but not tied to typingComplete
+            ease: [0.19, 1, 0.22, 1],
+          }}
           className="text-sm sm:text-base md:text-xl font-medium mb-4 text-blue-100 leading-relaxed whitespace-normal"
         >
           At IEEE NSUT, we unite to learn, teach, and innovate together. Lorem
@@ -196,10 +221,7 @@ export default function HeroBanner() {
       </div>
 
       {/* Animated Core Members Image Section with Scroll Effects */}
-      <div
-        ref={imageRef}
-        className="mt-4 md:mt-6 flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-4"
-      >
+      <div className="mt-4 md:mt-6 flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-4">
         <motion.div
           className="flex flex-col items-center w-full relative z-10"
           style={{
@@ -210,41 +232,64 @@ export default function HeroBanner() {
         >
           <motion.div
             ref={imageContainerRef}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={containerVariants}
             className="relative w-full"
-            style={{
-              y: containerY,
-              opacity: containerOpacity,
-              willChange: "transform, opacity",
-            }}
           >
             <motion.div
-              ref={imgRef}
-              initial={containerInitial}
-              animate={controls}
-              className="w-full relative overflow-hidden rounded-2xl shadow-2xl will-change-transform"
+              className="w-full min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] relative overflow-hidden rounded-2xl shadow-2xl will-change-transform bg-gradient-to-br from-[#0a2540] via-[#1565c0] to-black"
               onMouseEnter={handleImageHover}
               onMouseLeave={handleImageUnhover}
-              style={{
-                transformStyle: "preserve-3d",
-                transform: "translateZ(0)",
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                transition: {
+                  duration: 0.4,
+                  ease: [0.4, 0, 0.2, 1],
+                },
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 15,
               }}
             >
-              <motion.img
-                src="https://ieeensut.netlify.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fteam.27a51d4b.jpg&w=1920&q=75"
-                alt="Core Members"
-                className="w-full h-auto max-h-[50vh] object-cover hover:scale-105 transition-transform duration-500 ease-out"
-                style={{ transformOrigin: "center bottom" }}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-              />
-              <motion.p
-                ref={textRef}
-                className="absolute left-1/2 -translate-x-1/2 bottom-4 md:bottom-6 bg-black/70 px-4 py-2 rounded-full text-blue-100 text-xs sm:text-sm transition-all duration-300 z-20 pointer-events-none backdrop-blur-sm"
-                style={{
-                  whiteSpace: "nowrap",
-                  ...captionInitial,
+              <motion.div
+                initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+                animate={
+                  isInView
+                    ? { clipPath: "inset(0% 0% 0% 0%)" }
+                    : { clipPath: "inset(100% 0% 0% 0%)" }
+                }
+                transition={{
+                  duration: 1.2,
+                  ease: [0.19, 1, 0.22, 1],
+                  delay: 0.3,
                 }}
-                animate={controls}
+                style={{ overflow: "hidden", width: "100%", height: "100%" }}
+              >
+                <motion.img
+                  ref={imageRef}
+                  src="public\CoreMembers.jpg"
+                  alt="Core Members"
+                  initial={{ opacity: 0, scale: 1.05, filter: "blur(16px)" }}
+                  animate={
+                    isInView
+                      ? { opacity: 1, scale: 1, filter: "blur(0px)" }
+                      : { opacity: 0, scale: 1.05, filter: "blur(16px)" }
+                  }
+                  transition={{
+                    duration: 1.2,
+                    ease: [0.19, 1, 0.22, 1],
+                    delay: 0.3,
+                  }}
+                  className="w-full h-full min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] max-h-[100vh] max-w-[100vw] object-cover bg-gradient-to-b from-gray-900 to-gray-800 hover:scale-[1.02] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                />
+              </motion.div>
+              <motion.p
+                className="absolute left-1/2 -translate-x-1/2 bottom-4 md:bottom-6 bg-black/70 px-4 py-2 rounded-full text-blue-100 text-xs sm:text-sm z-20 pointer-events-none backdrop-blur-sm"
+                variants={captionVariants}
               >
                 Meet our core team members
               </motion.p>
