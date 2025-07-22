@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.loader-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-text {
+  margin-top: 1.9rem;
+  font-size: 5rem;
+  font-weight: 900;
+  color: white;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+
+  width: 100%;
+  text-align: center;
+
+  animation: fadeInText 1.8s ease-out 0.7s forwards,
+    exitUp 0.8s ease-in 3s forwards;
+}
+
+.loader-text span {
+  color: #00bfff;
+}
+
+.logo-img {
+  position: absolute;
+  height: 120px;
+  width: auto;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: slideUp 2s ease-in-out forwards,
+    moveSide 1s ease-in-out 2.2s forwards;
+  z-index: 2;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(-120px);
+  }
+}
+
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes moveSide {
+  0% {
+    top: calc(50% - 120px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    top: 16px;
+    left: 52px;
+    width: auto;
+    height: 68px;
+    transform: none;
+  }
+}
+
+@keyframes exitUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+}
+
+@media (max-width: 480px) {
+  .loader-text {
+    font-size: 3rem;
+  }
+  .logo-img {
+    width: 75px;
+    animation: slideUpMobile 2s ease-in-out forwards,
+      moveSideMobile 1s ease-in-out 2.2s forwards;
+  }
+}
+
+@keyframes slideUpMobile {
+  0% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(-100px);
+  }
+}
+
+@keyframes moveSideMobile {
+  0% {
+    top: calc(50% - 100px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    top: 16px;
+    left: 16px;
+    width: 60px;
+    transform: none;
+  }
+}
