@@ -133,7 +133,7 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full py-6 md:py-10 lg:py-12 flex flex-col items-center justify-start overflow-visible font-sans bg-black min-h-[80vh] mt-[64px] md:mt-[100px] lg:mt-[120px]"
+      className="relative w-full py-20 px-4 md:px-8 lg:px-16 xl:px-24 flex flex-col items-center justify-start bg-black min-h-[80vh] mt-[120px] font-sans overflow-visible"
       style={{ fontFamily: "'Poppins', sans-serif" }}
     >
       {/* Animated, glassmorphic glowing pill badge */}
@@ -141,7 +141,7 @@ export default function HeroBanner() {
         initial={{ opacity: 0, y: -30, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 1, ease: "circOut" }}
-        className="inline-block px-6 py-2 rounded-full text-sm md:text-base font-semibold mb-2 md:mb-6 shadow-xl bg-white/20 border border-white/30 backdrop-blur-xl text-white relative z-20"
+        className="inline-block px-8 md:px-10 lg:px-14 py-3 rounded-full text-lg md:text-xl font-semibold mb-96 shadow-xl bg-white/20 border border-white/30 backdrop-blur-xl text-white relative z-20"
         style={{ boxShadow: "0 0 32px 8px #42a5f5, 0 0 0 2px #fff2" }}
       >
         <span className="relative z-10">
@@ -151,7 +151,7 @@ export default function HeroBanner() {
       </motion.span>
 
       {/* Animated, immersive background */}
-      <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden">
+      <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden pointer-events-none select-none">
         {/* Animated gradient */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -161,25 +161,25 @@ export default function HeroBanner() {
         />
         {/* Floating techy shapes */}
         <motion.div
-          className="absolute left-1/4 top-1/3 w-40 h-40 bg-[#42a5f5]/20 rounded-full blur-2xl animate-float-slow"
+          className="absolute left-1/4 top-1/3 w-52 h-52 bg-[#42a5f5]/20 rounded-full blur-3xl animate-float-slow"
           animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute right-1/4 bottom-1/4 w-32 h-32 bg-[#1565c0]/30 rounded-full blur-2xl animate-float-slow"
+          className="absolute right-1/4 bottom-1/4 w-40 h-40 bg-[#1565c0]/30 rounded-full blur-2xl animate-float-slow"
           animate={{ y: [0, -20, 0], x: [0, -15, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
       {/* Content */}
-      <div className="w-full max-w-3xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 text-center">
-        <div className="bg-black/80 rounded-xl shadow-xl py-6 px-2 sm:px-6 md:px-10 flex flex-col items-center">
+      <div className="w-full max-w-5xl mx-auto px-0 text-center mt-0 lg:mt-6">
+        <div className="bg-black/90 rounded-3xl shadow-2xl py-16 md:py-20 px-4 md:px-8 lg:px-16 flex flex-col items-center gap-10">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.19, 1, 0.22, 1], delay: 0.2 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg leading-tight whitespace-normal text-center"
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-8 text-white drop-shadow-xl leading-tight whitespace-normal text-center mt-20"
             style={{
               minHeight: "1.5em",
               margin: "0 auto",
@@ -206,7 +206,7 @@ export default function HeroBanner() {
               delay: 1,
               ease: [0.19, 1, 0.22, 1],
             }}
-            className="text-sm sm:text-base md:text-lg font-medium mb-4 text-blue-50 leading-relaxed max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto px-2 sm:px-4 md:px-6 break-words"
+            className="text-lg md:text-xl font-medium mb-2 text-blue-50 leading-relaxed max-w-2xl mx-auto break-words"
             style={{ wordBreak: "break-word" }}
           >
             At IEEE NSUT, we unite to learn, teach, and innovate together. Lorem
@@ -216,9 +216,9 @@ export default function HeroBanner() {
       </div>
 
       {/* Animated Core Members Image Section with Scroll Effects */}
-      <div className="mt-10 md:mt-14 flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="mt-24 flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-0 lg:px-16">
         <motion.div
-          className="flex flex-col items-center w-full relative z-10"
+          className="flex flex-col items-center w-full relative z-10 gap-0"
           style={{
             scale,
             opacity,
@@ -233,7 +233,7 @@ export default function HeroBanner() {
             className="relative w-full"
           >
             <motion.div
-              className="w-full min-h-[40vh] sm:min-h-[50vh] md:min-h-[60vh] lg:min-h-[70vh] xl:min-h-[80vh] relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl will-change-transform bg-gradient-to-br from-[#0a2540] via-[#1565c0] to-black"
+              className="w-full min-h-[60vh] lg:min-h-[70vh] xl:min-h-[80vh] relative overflow-hidden rounded-2xl shadow-2xl will-change-transform bg-gradient-to-br from-[#0a2540] via-[#1565c0] to-black"
               onMouseEnter={handleImageHover}
               onMouseLeave={handleImageUnhover}
               whileHover={{
@@ -279,11 +279,11 @@ export default function HeroBanner() {
                     ease: [0.19, 1, 0.22, 1],
                     delay: 0.3,
                   }}
-                  className="w-full h-full min-h-[40vh] sm:min-h-[50vh] md:min-h-[60vh] lg:min-h-[70vh] xl:min-h-[80vh] max-h-[100vh] max-w-[100vw] object-cover bg-gradient-to-b from-gray-900 to-gray-800 hover:scale-[1.02] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-lg sm:rounded-xl md:rounded-2xl"
+                  className="w-full h-full min-h-[60vh] max-h-[100vh] object-cover bg-gradient-to-b from-gray-900 to-gray-800 hover:scale-[1.02] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-2xl"
                 />
               </motion.div>
               <motion.p
-                className="absolute left-1/2 -translate-x-1/2 bottom-4 md:bottom-6 bg-black/70 px-4 py-2 rounded-full text-blue-100 text-xs sm:text-sm z-20 pointer-events-none backdrop-blur-sm"
+                className="absolute left-1/2 -translate-x-1/2 bottom-8 bg-black/80 px-6 py-3 rounded-full text-blue-100 text-base z-20 pointer-events-none backdrop-blur-md shadow-lg"
                 variants={captionVariants}
               >
                 Meet our core team members
