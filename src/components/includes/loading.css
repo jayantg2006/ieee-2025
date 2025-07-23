@@ -104,14 +104,15 @@ html {
   }
 }
 
-@media (max-width: 769px) {
+@media (max-width: 480px) {
   .loader-text {
     font-size: 3rem;
   }
   .logo-img {
-    margin-left:10px;
-    height: 48px;
-    width:auto;
+    
+    
+    width:75px;
+    height: auto;
 
     animation: slideUpMobile 2s ease-in-out forwards,
       moveSideMobile 1s ease-in-out 2.2s forwards;
@@ -135,7 +136,8 @@ html {
   }
   100% {
     
-    left: 10px;
+    margin-left: 10px;
+    height: 48px;
     width: auto;
     transform: none;
   }
